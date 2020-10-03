@@ -1,6 +1,8 @@
 const express = require('express');
 const customerRouter = express.Router();
 const {Customer} = require('../sequelize');
+const md5 = require('md5');
+const moment = require('moment');
 
 const CustomerIndex = (req, res, next) => {
     Customer.findAll({
@@ -90,11 +92,77 @@ const CustomerDelete = (req, res, next) => {
 }
 
 const CustomerUpdate = (req, res, next) => {
-    res.send('sd');
+    Customer.update(
+        {
+            name: req.body.name,
+            email: req.body.email,
+            password: md5(req.body.password),
+            gender: req.body.gender,
+            is_married: req.body.is_married,
+            address: req.body.address,
+            status: req.body.status,
+        }, {
+        where: {
+            id: req.params.id
+        }
+    }).then(u => {
+        res.status(200);
+        res.json({
+            status: {
+                code: 200,
+                response: "success",
+                message: "success updatexxx customer"
+            },
+            result: u
+        });
+    }).catch(e => {
+        res.status(500);
+        res.json({
+            status: {
+                code: 500,
+                response: "error",
+                message: "error update customer"
+            },
+            result: e.message
+        });
+    }).finally(f => {
+        console.log(req.params.id);
+    })
 }
 
 const CustomerAdd = (req, res, next) => {
-    res.send('add');
+    Customer.create({
+        name: req.body.name,
+        email: req.body.email,
+        password: md5(req.body.password),
+        gender: req.body.gender,
+        is_married: req.body.is_married,
+        address: req.body.address,
+        status: req.body.status,
+        created_at: moment().format('YYYY-MM-DD HH:mm:ss'),
+    }).then(c => {
+        res.status(200);
+        res.json({
+            status: {
+                code: 200,
+                response: "success",
+                message: "success add customer"
+            },
+            result: c
+        });
+    }).catch(e => {
+        res.status(500);
+        res.json({
+            status: {
+                code: 500,
+                response: "error",
+                message: "error add customer"
+            },
+            result: e.message
+        });
+    }).finally(f => {
+        console.log('close db connection');
+    })
 }
 
 customerRouter.get("/", CustomerIndex);
