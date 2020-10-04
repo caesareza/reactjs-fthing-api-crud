@@ -5,7 +5,7 @@ const md5 = require('md5');
 const moment = require('moment');
 
 const CustomerIndex = (req, res, next) => {
-    Customer.findAll({
+    Customer.findAndCountAll({
         where: {
             status: 1
         },
@@ -96,11 +96,9 @@ const CustomerUpdate = (req, res, next) => {
         {
             name: req.body.name,
             email: req.body.email,
-            password: md5(req.body.password),
             gender: req.body.gender,
             is_married: req.body.is_married,
-            address: req.body.address,
-            status: req.body.status,
+            address: req.body.address
         }, {
         where: {
             id: req.params.id
