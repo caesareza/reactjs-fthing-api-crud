@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize');
 const CustomerModel = require('./models/Customer');
 
-const sequelize = new Sequelize('fthing', 'timur', 'G4rudaTerbangTinggi', {
-    host: '178.128.214.119',
+const sequelize = new Sequelize('', '', '', {
+    host: '',
     dialect: 'mysql',
     define: {
         underscored: true,
